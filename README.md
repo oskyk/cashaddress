@@ -1,5 +1,6 @@
 # cashaddress
 `cashaddress` is python library which is able to convert legacy BCH address to new format.
+Note: This library is coded to python2 and **will work only on python2**, python3 support is planned in future
 
 # Requirements
 The requirements of this library are:
