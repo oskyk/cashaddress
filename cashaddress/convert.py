@@ -57,6 +57,8 @@ class Address:
 
     @staticmethod
     def from_string(address_string):
+        if not isinstance(address_string, basestring):
+            raise InvalidAddress('Expected string as input')
         if ':' not in address_string:
             return Address._legacy_string(address_string)
         else:
