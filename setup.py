@@ -10,6 +10,6 @@ setup(name='cashaddress',
       author_email='oskyks1@gmail.com',
       url='https://github.com/oskyk/cashaddress',
       download_url='https://github.com/oskyk/cashaddress/archive/1.0.0.tar.gz',
-      python_requires='>=2.7',
+      python_requires='>=2.7,<3',
       keywords=['bitcoincash', 'bch', 'address', 'cashaddress', 'legacy', 'convert']
 )
