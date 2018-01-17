@@ -1,5 +1,6 @@
 from cashaddress.crypto import *
 from base58 import b58decode_check, b58encode_check
+import sys
 
 
 class InvalidAddress(Exception):
@@ -43,9 +44,14 @@ class Address:
 
     @staticmethod
     def code_list_to_string(code_list):
-        output = ''
-        for code in code_list:
-            output += chr(code)
+        if sys.version_info > (3, 0):
+            output = bytes()
+            for code in code_list:
+                output += bytes([code])
+        else:
+            output = ''
+            for code in code_list:
+                output += chr(code)
         return output
 
     @staticmethod
@@ -57,8 +63,6 @@ class Address:
 
     @staticmethod
     def from_string(address_string):
-        if not isinstance(address_string, str):
-            raise InvalidAddress('Expected string as input')
         if ':' not in address_string:
             return Address._legacy_string(address_string)
         else:
@@ -72,8 +76,8 @@ class Address:
             raise InvalidAddress('Could not decode legacy address')
         version = Address._address_type('legacy', decoded[0])[0]
         payload = list()
-        for letter in str(decoded[1:]):
-            payload.append(ord(letter))
+        for letter in decoded[1:]:
+            payload.append(letter)
         return Address(version, payload)
 
     @staticmethod
