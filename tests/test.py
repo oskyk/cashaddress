@@ -27,6 +27,30 @@ class TestConversion(unittest.TestCase):
         self.assertEqual(convert.to_cash_address('bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h'),
                          'bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h')
 
+    def test_to_legacy_p2sh_testnet(self):
+        self.assertEqual(convert.to_legacy_address('2MwikwR6hoVijCmr1u8UgzFMHFP6rpQyRvP'),
+                         '2MwikwR6hoVijCmr1u8UgzFMHFP6rpQyRvP')
+        self.assertEqual(convert.to_legacy_address('bchtest:pqc3tyspqwn95retv5k3c5w4fdq0cxvv95u36gfk00'),
+                         '2MwikwR6hoVijCmr1u8UgzFMHFP6rpQyRvP')
+
+    def test_to_legacy_p2pkh_testnet(self):
+        self.assertEqual(convert.to_legacy_address('mqp7vM7eU7Vu9NPH1V7s7pPg5FFBMo6SWK'),
+                         'mqp7vM7eU7Vu9NPH1V7s7pPg5FFBMo6SWK')
+        self.assertEqual(convert.to_legacy_address('bchtest:qpc0qh2xc3tfzsljq79w37zx02kwvzm4gydm222qg8'),
+                         'mqp7vM7eU7Vu9NPH1V7s7pPg5FFBMo6SWK')
+
+    def test_to_cash_p2sh_testnet(self):
+        self.assertEqual(convert.to_cash_address('2MwikwR6hoVijCmr1u8UgzFMHFP6rpQyRvP'),
+                         'bchtest:pqc3tyspqwn95retv5k3c5w4fdq0cxvv95u36gfk00')
+        self.assertEqual(convert.to_cash_address('bchtest:pqc3tyspqwn95retv5k3c5w4fdq0cxvv95u36gfk00'),
+                         'bchtest:pqc3tyspqwn95retv5k3c5w4fdq0cxvv95u36gfk00')
+
+    def test_to_cash_p2pkh_testnet(self):
+        self.assertEqual(convert.to_cash_address('mqp7vM7eU7Vu9NPH1V7s7pPg5FFBMo6SWK'),
+                         'bchtest:qpc0qh2xc3tfzsljq79w37zx02kwvzm4gydm222qg8')
+        self.assertEqual(convert.to_cash_address('bchtest:qpc0qh2xc3tfzsljq79w37zx02kwvzm4gydm222qg8'),
+                         'bchtest:qpc0qh2xc3tfzsljq79w37zx02kwvzm4gydm222qg8')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -10,15 +10,20 @@ class InvalidAddress(Exception):
 class Address:
     VERSION_MAP = {
         'legacy': [
-            ('P2SH', 5),
-            ('P2PKH', 0)
+            ('P2SH', 5, False),
+            ('P2PKH', 0, False),
+            ('P2SH-TESTNET', 196, True),
+            ('P2PKH-TESTNET', 111, True)
         ],
         'cash': [
-            ('P2SH', 8),
-            ('P2PKH', 0)
+            ('P2SH', 8, False),
+            ('P2PKH', 0, False),
+            ('P2SH-TESTNET', 8, True),
+            ('P2PKH-TESTNET', 0, True)
         ]
     }
-    DEFAULT_PREFIX = 'bitcoincash'
+    MAINNET_PREFIX = 'bitcoincash'
+    TESTNET_PREFIX = 'bchtest'
 
     def __init__(self, version, payload, prefix=None):
         self.version = version
@@ -26,7 +31,10 @@ class Address:
         if prefix:
             self.prefix = prefix
         else:
-            self.prefix = self.DEFAULT_PREFIX
+            if Address._address_type('cash', self.version)[2]:
+                self.prefix = self.TESTNET_PREFIX
+            else:
+                self.prefix = self.MAINNET_PREFIX
 
     def __str__(self):
         return 'version: {}\npayload: {}\nprefix: {}'.format(self.version, self.payload, self.prefix)
@@ -90,13 +98,15 @@ class Address:
             raise InvalidAddress('Cash address contains uppercase and lowercase characters')
         address_string = address_string.lower()
         if ':' not in address_string:
-            address_string = Address.DEFAULT_PREFIX + ':' + address_string
+            address_string = Address.MAINNET_PREFIX + ':' + address_string
         prefix, base32string = address_string.split(':')
         decoded = b32decode(base32string)
         if not verify_checksum(prefix, decoded):
             raise InvalidAddress('Bad cash address checksum')
         converted = convertbits(decoded, 5, 8)
         version = Address._address_type('cash', converted[0])[0]
+        if prefix == Address.TESTNET_PREFIX:
+            version += '-TESTNET'
         payload = converted[1:-6]
         return Address(version, payload, prefix)
 
