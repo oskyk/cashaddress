@@ -45,7 +45,8 @@ class Address:
 
     def cash_address(self):
         version_int = Address._address_type('cash', self.version)[1]
-        payload = [version_int] + self.payload
+        vsize=[((vsize+5-(vsize & 4))*(4 + (vsize & 4))) for vsize in range(8)].index(len(payload))
+        payload = [version_int | vsize] + self.payload
         payload = convertbits(payload, 8, 5)
         checksum = calculate_checksum(self.prefix, payload)
         return self.prefix + ':' + b32encode(payload + checksum)
@@ -104,10 +105,18 @@ class Address:
         if not verify_checksum(prefix, decoded):
             raise InvalidAddress('Bad cash address checksum')
         converted = convertbits(decoded, 5, 8)
-        version = Address._address_type('cash', converted[0])[0]
+
+        vbyte=converted[0]
+        vint=vbyte & 0x78
+        vsize=vbyte & 0x7
+        expected_length=((vsize+5-(vsize & 4))*(4 + (vsize & 4)))
+
+        version = Address._address_type('cash', vint)[0]
         if prefix == Address.TESTNET_PREFIX:
             version += '-TESTNET'
         payload = converted[1:-6]
+        if(len(payload) != expected_length):
+            raise InvalidAddress('CashAddr has a mismatched payload length')
         return Address(version, payload, prefix)
 
 
