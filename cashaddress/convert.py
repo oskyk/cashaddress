@@ -41,7 +41,7 @@ class Address:
 
     def legacy_address(self):
         version_int = Address._address_type('legacy', self.version)[1]
-        return b58encode_check(Address.code_list_to_string([version_int] + self.payload))
+        return b58encode_check(Address.code_list_to_string([version_int] + self.payload)).decode()
 
     def cash_address(self):
         version_int = Address._address_type('cash', self.version)[1]
