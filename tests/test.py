@@ -52,6 +52,14 @@ class TestConversion(unittest.TestCase):
         self.assertEqual(convert.to_cash_address('bchtest:qpc0qh2xc3tfzsljq79w37zx02kwvzm4gydm222qg8'),
                          'bchtest:qpc0qh2xc3tfzsljq79w37zx02kwvzm4gydm222qg8')
 
+    def test_is_valid(self):
+        self.assertTrue(convert.is_valid('bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h'))
+        self.assertTrue(convert.is_valid('2MwikwR6hoVijCmr1u8UgzFMHFP6rpQyRvP'))
+        self.assertFalse(convert.is_valid('bitcoincash:aqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h'))
+        self.assertFalse(convert.is_valid('bitcoincash:qqqqqqqq9ry2p9l53lxp635va4h86wv435995w8p2h'))
+        self.assertFalse(convert.is_valid('22222wR6hoVijCmr1u8UgzFMHFP6rpQyRvP'))
+        self.assertFalse(convert.is_valid(False))
+        self.assertFalse(convert.is_valid('Hello World!'))
 
 if __name__ == '__main__':
     unittest.main()
