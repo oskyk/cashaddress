@@ -12,4 +12,6 @@ cache: pip
 before_install:
   - pip install -r test_requirements.txt
 script:
-  - pytest
+  - pytest --cov=cashaddress
+after_success:
+  - coveralls
