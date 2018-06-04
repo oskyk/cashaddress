@@ -11,7 +11,5 @@ matrix:
 cache: pip
 before_install:
   - pip install -r test_requirements.txt
-install:
-  - pip install -e . # install dependencies as specified in setup.py
 script:
   - pytest

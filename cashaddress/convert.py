@@ -1,5 +1,5 @@
 from cashaddress.crypto import *
-from base58 import b58decode_check, b58encode_check
+from cashaddress.base58 import b58decode_check, b58encode_check
 import sys
 
 

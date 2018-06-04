@@ -45,11 +45,6 @@ convert.is_valid('bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h')
 
 1. Clone the repository
 2. Create virtualenv
-3. Install depedencies
-
-
-    pip install -r requirements.txt -r test_requirements.txt
-
 4. Do your thing
 5. Run tests
 
