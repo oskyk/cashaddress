@@ -1,2 +1,16 @@
+# IDE files
+.project
+.pydevproject
+.settings
+.idea
+
+# setuptools
 dist
-testing.py
+*.egg-info
+.eggs
+build
+.cache
+
+# Unit testing process outputs
+.coverage
+.pytest_cache/

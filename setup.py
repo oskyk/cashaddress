@@ -11,5 +11,10 @@ setup(name='cashaddress',
       url='https://github.com/oskyk/cashaddress',
       download_url='https://github.com/oskyk/cashaddress/archive/1.0.4.tar.gz',
       python_requires='>=2.7',
-      keywords=['bitcoincash', 'bch', 'address', 'cashaddress', 'legacy', 'convert']
+      keywords=['bitcoincash', 'bch', 'address', 'cashaddress', 'legacy', 'convert'],
+      classifiers=[
+          'Programming Language :: Python :: 2.7',
+          'Programming Language :: Python :: 3',
+          'Programming Language :: Python :: 3.6',
+      ],
 )

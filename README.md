@@ -1,11 +1,6 @@
 # cashaddress
 `cashaddress` is python library which is able to convert legacy BCH address to new format.
 
-# Requirements
-The requirements of this library are:
-
-    pip install base58
-
 # Installation
 To install this library and its dependencies use:
 
@@ -43,3 +38,18 @@ or
 ```python
 convert.is_valid('bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h')
 ```
+
+# Development
+
+1. Clone the repository
+2. Create virtualenv
+3. Install depedencies
+
+
+    pip install -r requirements.txt -r test_requirements.txt
+
+4. Do your thing
+5. Run tests
+
+
+    pytest

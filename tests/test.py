@@ -1,5 +1,6 @@
-from cashaddress import convert
 import unittest
+
+from cashaddress import convert
 
 
 class TestConversion(unittest.TestCase):
