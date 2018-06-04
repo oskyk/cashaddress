@@ -15,3 +15,13 @@ script:
   - pytest --cov=cashaddress
 after_success:
   - coveralls
+
+deploy:
+  on:
+    python: '3.6'
+  provider: pypi
+  distributions: 'sdist'
+  user: oskyk
+  password:
+    secure: "V+23G0TYlfKJiatgR82DTXlzAHhl8Z+86zFlwbQ1nkJ7qVu45gza6u2hHekcMjDvQkskx6mDW9T1oU8wk9g9F7gTlQxgXds1IzJBDGiM2nw3HMOPLyBfVLnVKMGCSdbyiBqIxfVp4xpd+a8fBT2enfmHSrmRrGUs2Ek+qH1dmHcMEhBpGdH4pS3RwMOMqVcFfiZFmV6bi7XKbiqnNCwCCa+0xFOUAULUlJscm1vLUqmhyU8KbqMzg6g95i4Dq3L3FOwLHmIVuUjPLbpG7Z82n3O1cM3jlC6Mu9jKIO1WwgRiT+PK8Uh8PZqL9++hPYCBUtQlKu29BcWCKjlhjJn6LfZcwtaCH++k9CY4kq8/c5ECIjkrOnrb69WHgCj+bVBV+UJO8+MhRWClA6P7PovDv8UHBz/bYPHDrgMp3UawaApwbP14/ZwzyEbPZ07SwXq6axLk6J+llq7QuriVO7xPe+rlruWsGInwrU/TpvA5KlHknodyUSzZD+9/iWiMSMaJ24lKer/4ot/uv4Tr45KlatQXiNLE4G7ybFzGXI117cLqvLjoglzjrCUWx8TVTM9nTwzWI2j2hFDqA3Ce+xd7A/ueQTWtH5XwCPwn8RYcLkmW29MrKsnMuSkZD2ywfDDliFNNhFwMLY7u7cXsuC9PqfCBkjP5tgTFZj7XZMYMMNA="
+
