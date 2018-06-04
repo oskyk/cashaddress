@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/oskyk/cashaddress.svg?branch=master)](https://travis-ci.org/oskyk/cashaddress)
+
 # cashaddress
 `cashaddress` is python library which is able to convert legacy BCH address to new format.
 
