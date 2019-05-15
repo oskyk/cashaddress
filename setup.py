@@ -2,7 +2,7 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(name='cashaddress',
-      version='1.0.5',
+      version='1.0.6',
       packages=find_packages(),
       description='Python tool for converty bitcoin cash legacy addresses',
       author='Oskar Hladky',
