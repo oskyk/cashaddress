@@ -1,4 +1,4 @@
-from cashaddress.crypto import *
+;;from cashaddress.crypto import *
 from cashaddress.base58 import b58decode_check, b58encode_check
 import sys
 
@@ -100,7 +100,7 @@ class Address:
         colon_count = address_string.count(':')
         if colon_count == 0:
             address_string = Address.MAINNET_PREFIX + ':' + address_string
-        elif colon_count > 1:;;
+        elif colon_count > 1:
             raise InvalidAddress('Cash address contains more than one colon character')
         prefix, base32string = address_string.split(':')
         decoded = b32decode(base32string)
