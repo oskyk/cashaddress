@@ -97,8 +97,11 @@ class Address:
         if address_string.upper() != address_string and address_string.lower() != address_string:
             raise InvalidAddress('Cash address contains uppercase and lowercase characters')
         address_string = address_string.lower()
-        if ':' not in address_string:
+        colon_count = address_string.count(':')
+        if colon_count == 0:
             address_string = Address.MAINNET_PREFIX + ':' + address_string
+        elif colon_count > 1:
+            raise InvalidAddress('Cash address contains more than one colon character')
         prefix, base32string = address_string.split(':')
         decoded = b32decode(base32string)
         if not verify_checksum(prefix, decoded):
