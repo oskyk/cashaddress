@@ -1,13 +1,14 @@
 from cashaddress.crypto import *
 from cashaddress.base58 import b58decode_check, b58encode_check
 import sys
+from functools import partial
 
 
 class InvalidAddress(Exception):
     pass
 
 
-class Address:
+class Address(object):
     VERSION_MAP = {
         'legacy': [
             ('P2SH', 5, False),
@@ -22,8 +23,11 @@ class Address:
             ('P2PKH-TESTNET', 0, True)
         ]
     }
+    VERSION_MAP['slp'] = VERSION_MAP['cash']
+
     MAINNET_PREFIX = 'bitcoincash'
     TESTNET_PREFIX = 'bchtest'
+    SLP_PREFIX = 'simpleledger'
 
     def __init__(self, version, payload, prefix=None):
         self.version = version
@@ -39,16 +43,27 @@ class Address:
     def __str__(self):
         return 'version: {}\npayload: {}\nprefix: {}'.format(self.version, self.payload, self.prefix)
 
-    def legacy_address(self):
-        version_int = Address._address_type('legacy', self.version)[1]
-        return b58encode_check(Address.code_list_to_string([version_int] + self.payload))
 
-    def cash_address(self):
-        version_int = Address._address_type('cash', self.version)[1]
-        payload = [version_int] + self.payload
-        payload = convertbits(payload, 8, 5)
-        checksum = calculate_checksum(self.prefix, payload)
-        return self.prefix + ':' + b32encode(payload + checksum)
+    def _wrapper(self, body):
+        return self.prefix + ':' + b32encode(body)
+
+
+    def __getattr__(self, attr):
+        if attr == 'legacy_address':
+            version_int = Address._address_type('legacy', self.version)[1]
+            return partial(b58encode_check, Address.code_list_to_string([version_int] + self.payload))
+        else:
+            addr_type = attr.split("_")[0]
+            if addr_type not in self.VERSION_MAP:
+                raise AttributeError()
+            version_int = Address._address_type('cash', self.version)[1]
+            payload = [version_int] + self.payload
+            payload = convertbits(payload, 8, 5)
+            if addr_type == 'slp':
+                self.prefix = self.SLP_PREFIX
+            checksum = calculate_checksum(self.prefix, payload)
+            return partial(self._wrapper, (payload + checksum))
+
 
     @staticmethod
     def code_list_to_string(code_list):
@@ -78,7 +93,13 @@ class Address:
         if ':' not in address_string:
             return Address._legacy_string(address_string)
         else:
-            return Address._cash_string(address_string)
+            if address_string.startswith(Address.MAINNET_PREFIX) or address_string.startswith(Address.TESTNET_PREFIX):
+                return Address._cash_string(address_string, 'cash')
+            elif address_string.startswith(Address.SLP_PREFIX):
+                return Address._cash_string(address_string, 'slp')
+            else:
+                raise InvalidAddress('Unexpected Prefix')
+
 
     @staticmethod
     def _legacy_string(address_string):
@@ -92,8 +113,9 @@ class Address:
             payload.append(letter)
         return Address(version, payload)
 
+
     @staticmethod
-    def _cash_string(address_string):
+    def _cash_string(address_string, address_type='cash'):
         if address_string.upper() != address_string and address_string.lower() != address_string:
             raise InvalidAddress('Cash address contains uppercase and lowercase characters')
         address_string = address_string.lower()
@@ -107,7 +129,7 @@ class Address:
         if not verify_checksum(prefix, decoded):
             raise InvalidAddress('Bad cash address checksum')
         converted = convertbits(decoded, 5, 8)
-        version = Address._address_type('cash', converted[0])[0]
+        version = Address._address_type(address_type, converted[0])[0]
         if prefix == Address.TESTNET_PREFIX:
             version += '-TESTNET'
         payload = converted[1:-6]
@@ -120,6 +142,10 @@ def to_cash_address(address):
 
 def to_legacy_address(address):
     return Address.from_string(address).legacy_address()
+
+
+def to_slp_address(address):
+    return Address.from_string(address).slp_address()
 
 
 def is_valid(address):

@@ -16,6 +16,10 @@ class TestConversion(unittest.TestCase):
         self.assertEqual(convert.to_legacy_address('bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h'),
                          '155fzsEBHy9Ri2bMQ8uuuR3tv1YzcDywd4')
 
+    def test_to_slp_p2pkh(self):
+        self.assertEqual(convert.to_slp_address('155fzsEBHy9Ri2bMQ8uuuR3tv1YzcDywd4'),
+                         'simpleledger:qqkv9wr69ry2p9l53lxp635va4h86wv435f7l4jp5f')
+
     def test_to_cash_p2sh(self):
         self.assertEqual(convert.to_cash_address('3CWFddi6m4ndiGyKqzYvsFYagqDLPVMTzC'),
                          'bitcoincash:ppm2qsznhks23z7629mms6s4cwef74vcwvn0h829pq')
@@ -55,6 +59,7 @@ class TestConversion(unittest.TestCase):
     def test_is_valid(self):
         self.assertTrue(convert.is_valid('bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h'))
         self.assertTrue(convert.is_valid('2MwikwR6hoVijCmr1u8UgzFMHFP6rpQyRvP'))
+        self.assertTrue(convert.is_valid('simpleledger:qqkv9wr69ry2p9l53lxp635va4h86wv435f7l4jp5f'))
         self.assertFalse(convert.is_valid('bitcoincash:aqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h'))
         self.assertFalse(convert.is_valid('bitcoincash:qqqqqqqq9ry2p9l53lxp635va4h86wv435995w8p2h'))
         self.assertFalse(convert.is_valid('22222wR6hoVijCmr1u8UgzFMHFP6rpQyRvP'))
