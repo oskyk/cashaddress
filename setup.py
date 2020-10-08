@@ -1,14 +1,14 @@
 from distutils.core import setup
 from setuptools import find_packages
 
-setup(name='cashaddress',
-      version='1.0.6',
+setup(name='cashaddress-regtest',
+      version='1.1.0',
       packages=find_packages(),
-      description='Python tool for converty bitcoin cash legacy addresses',
-      author='Oskar Hladky',
-      author_email='oskyks1@gmail.com',
-      url='https://github.com/oskyk/cashaddress',
-      download_url='https://github.com/oskyk/cashaddress/archive/1.0.4.tar.gz',
+      description='Python tool for convert bitcoin cash and legacy addresses',
+      author='Nicolai Skye',
+      author_email='nicolaiskye@icloud.com',
+      url='https://github.com/nicolaiskye/cashaddress',
+      download_url='https://github.com/nicolaiskye/cashaddress/archive/1.1.0.tar.gz',
       python_requires='>=2.7',
       keywords=['bitcoincash', 'bch', 'address', 'cashaddress', 'legacy', 'convert'],
       classifiers=[
