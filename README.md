@@ -31,7 +31,7 @@ address = convert.to_legacy_address('bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv
 In the case that you are using "regtest" mode on a local node, you should also pass the following parameter:
 
 ```python
-address = convert.to_cash_addres('', regtest=True)
+address = convert.to_cash_addres('2MwSNRexxm3uhAKF696xq3ztdiqgMj36rJo', regtest=True)
 ```
 
 which is necessary since testnet and regtest legacy address formats are identical, and the library cannot differentiate them.
