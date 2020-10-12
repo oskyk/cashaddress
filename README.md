@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/oskyk/cashaddress.svg?branch=master)](https://travis-ci.org/oskyk/cashaddress)
+[![Coverage Status](https://coveralls.io/repos/github/oskyk/cashaddress/badge.svg)](https://coveralls.io/github/oskyk/cashaddress)
 
 # cashaddress
 `cashaddress` is python library which is able to convert legacy BCH address to new format.
@@ -5,13 +7,13 @@
 # Installation
 To install this library and its dependencies use:
 
-    pip install cashaddress-regtest
+    pip install cashaddress
     
 # Usage examples
 The first thing you need to do is import the library via:
 
 ```python
-from cashaddress-regtest import convert
+from cashaddress import convert
 ```
 ## Converting address
 **It does not matter if you use legacy or new address as input.**
@@ -27,15 +29,6 @@ or
 ```python
 address = convert.to_legacy_address('bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h')
 ```
-
-In the case that you are using "regtest" mode on a local node, you should also pass the following parameter:
-
-```python
-address = convert.to_cash_addres('2MwSNRexxm3uhAKF696xq3ztdiqgMj36rJo', regtest=True)
-```
-
-which is necessary since testnet and regtest legacy address formats are identical, and the library cannot differentiate them.
-
 ## Validating address
 You can also validate address via:
 
