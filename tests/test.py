@@ -52,6 +52,30 @@ class TestConversion(unittest.TestCase):
         self.assertEqual(convert.to_cash_address('bchtest:qpc0qh2xc3tfzsljq79w37zx02kwvzm4gydm222qg8'),
                          'bchtest:qpc0qh2xc3tfzsljq79w37zx02kwvzm4gydm222qg8')
 
+    def test_to_legacy_p2sh_regtest(self):
+        self.assertEqual(convert.to_legacy_address('2MwSNRexxm3uhAKF696xq3ztdiqgMj36rJo'),
+                         '2MwSNRexxm3uhAKF696xq3ztdiqgMj36rJo')
+        self.assertEqual(convert.to_legacy_address('bchreg:pqklc8ehp365xvtru6a394e4wxz52nt5nurac3g7rq'),
+                         '2MwSNRexxm3uhAKF696xq3ztdiqgMj36rJo')
+
+    def test_to_legacy_p2pkh_regtest(self):
+        self.assertEqual(convert.to_legacy_address('moehusBtUt3aKW5c2p3ZTRkSTRrr3dpnwe'),
+                         'moehusBtUt3aKW5c2p3ZTRkSTRrr3dpnwe')
+        self.assertEqual(convert.to_legacy_address('bchreg:qpvns5lcufh5haf5jt79fk8trcw4j8c3nsvhdappvt'),
+                         'moehusBtUt3aKW5c2p3ZTRkSTRrr3dpnwe')
+
+    def test_to_cash_p2sh_regtest(self):
+        self.assertEqual(convert.to_cash_address('2MwSNRexxm3uhAKF696xq3ztdiqgMj36rJo', regtest=True),
+                         'bchreg:pqklc8ehp365xvtru6a394e4wxz52nt5nurac3g7rq')
+        self.assertEqual(convert.to_cash_address('bchreg:pqklc8ehp365xvtru6a394e4wxz52nt5nurac3g7rq', regtest=True),
+                         'bchreg:pqklc8ehp365xvtru6a394e4wxz52nt5nurac3g7rq')
+
+    def test_to_cash_p2pkh_regtest(self):
+        self.assertEqual(convert.to_cash_address('moehusBtUt3aKW5c2p3ZTRkSTRrr3dpnwe', regtest=True),
+                         'bchreg:qpvns5lcufh5haf5jt79fk8trcw4j8c3nsvhdappvt')
+        self.assertEqual(convert.to_cash_address('bchreg:qpvns5lcufh5haf5jt79fk8trcw4j8c3nsvhdappvt', regtest=True),
+                         'bchreg:qpvns5lcufh5haf5jt79fk8trcw4j8c3nsvhdappvt')
+
     def test_is_valid(self):
         self.assertTrue(convert.is_valid('bitcoincash:qqkv9wr69ry2p9l53lxp635va4h86wv435995w8p2h'))
         self.assertTrue(convert.is_valid('2MwikwR6hoVijCmr1u8UgzFMHFP6rpQyRvP'))

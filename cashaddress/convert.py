@@ -10,20 +10,25 @@ class InvalidAddress(Exception):
 class Address:
     VERSION_MAP = {
         'legacy': [
-            ('P2SH', 5, False),
-            ('P2PKH', 0, False),
-            ('P2SH-TESTNET', 196, True),
-            ('P2PKH-TESTNET', 111, True)
+            ('P2SH', 5, 'mainnet'),
+            ('P2PKH', 0, 'mainnet'),
+            ('P2SH-TESTNET', 196, 'testnet'),
+            ('P2PKH-TESTNET', 111, 'testnet'),
+            ('P2SH-REGTEST', 196, 'regtest'),
+            ('P2PKH-REGTEST', 111, 'regtest')
         ],
         'cash': [
-            ('P2SH', 8, False),
-            ('P2PKH', 0, False),
-            ('P2SH-TESTNET', 8, True),
-            ('P2PKH-TESTNET', 0, True)
+            ('P2SH', 8, 'mainnet'),
+            ('P2PKH', 0, 'mainnet'),
+            ('P2SH-TESTNET', 8, 'testnet'),
+            ('P2PKH-TESTNET', 0, 'testnet'),
+            ('P2SH-REGTEST', 8, 'regtest'),
+            ('P2PKH-REGTEST', 0, 'regtest')
         ]
     }
     MAINNET_PREFIX = 'bitcoincash'
     TESTNET_PREFIX = 'bchtest'
+    REGTEST_PREFIX = 'bchreg'
 
     def __init__(self, version, payload, prefix=None):
         self.version = version
@@ -31,7 +36,9 @@ class Address:
         if prefix:
             self.prefix = prefix
         else:
-            if Address._address_type('cash', self.version)[2]:
+            if Address._address_type('cash', self.version)[2] == "regtest":
+                self.prefix = self.REGTEST_PREFIX
+            elif Address._address_type('cash', self.version)[2] == "testnet":
                 self.prefix = self.TESTNET_PREFIX
             else:
                 self.prefix = self.MAINNET_PREFIX
@@ -43,7 +50,9 @@ class Address:
         version_int = Address._address_type('legacy', self.version)[1]
         return b58encode_check(Address.code_list_to_string([version_int] + self.payload))
 
-    def cash_address(self):
+    def cash_address(self, regtest=False):
+        if regtest:
+            self.prefix = Address.REGTEST_PREFIX 
         version_int = Address._address_type('cash', self.version)[1]
         payload = [version_int] + self.payload
         payload = convertbits(payload, 8, 5)
@@ -108,14 +117,16 @@ class Address:
             raise InvalidAddress('Bad cash address checksum')
         converted = convertbits(decoded, 5, 8)
         version = Address._address_type('cash', converted[0])[0]
-        if prefix == Address.TESTNET_PREFIX:
+        if prefix == Address.REGTEST_PREFIX:
+            version += '-REGTEST'
+        elif prefix == Address.TESTNET_PREFIX:
             version += '-TESTNET'
         payload = converted[1:-6]
         return Address(version, payload, prefix)
 
 
-def to_cash_address(address):
-    return Address.from_string(address).cash_address()
+def to_cash_address(address, regtest=False):
+    return Address.from_string(address).cash_address(regtest)
 
 
 def to_legacy_address(address):
