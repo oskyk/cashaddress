@@ -43,12 +43,13 @@ class Address:
         version_int = Address._address_type('legacy', self.version)[1]
         return b58encode_check(Address.code_list_to_string([version_int] + self.payload))
 
-    def cash_address(self):
+    def cash_address(self, prefix=None):
+        prefix = prefix if prefix is not None else self.prefix
         version_int = Address._address_type('cash', self.version)[1]
         payload = [version_int] + self.payload
         payload = convertbits(payload, 8, 5)
-        checksum = calculate_checksum(self.prefix, payload)
-        return self.prefix + ':' + b32encode(payload + checksum)
+        checksum = calculate_checksum(prefix, payload)
+        return prefix + ':' + b32encode(payload + checksum)
 
     @staticmethod
     def code_list_to_string(code_list):
