@@ -1,7 +1,7 @@
 import unittest
 
 from cashaddress import convert
-from cashaddress.convert import Address
+from cashaddress.convert import Address, InvalidAddress
 
 
 class TestConversion(unittest.TestCase):
@@ -81,6 +81,22 @@ class TestConversion(unittest.TestCase):
         # The prefix defaults to the one in the input string.
         self.assertEqual(addr2.prefix, 'regtest')
         self.assertEqual(addr2.cash_address(), regtest_address)
+
+    def test_prefix_case(self):
+        with self.assertRaises(InvalidAddress):
+            Address.from_string(
+                'rEgTeSt:qr4pqy6q4cy2d50zpaek57nnrja7289fksjm6es9se')
+        with self.assertRaises(InvalidAddress):
+            Address.from_string(
+                'regtest:QR4PQY6Q4CY2D50ZPAEK57NNRJA7289FKSJM6ES9SE')
+
+        addr = Address.from_string('regtest:qr4pqy6q4cy2d50zpaek57nnrja7289fksjm6es9se')
+        # The address should take the same case as the specified prefix
+        self.assertEqual(addr.cash_address(prefix="SLP"),
+                         'SLP:QR4PQY6Q4CY2D50ZPAEK57NNRJA7289FKSWF89PY2G')
+        # Do not allow mixed-case prefixes
+        with self.assertRaises(InvalidAddress):
+            addr.cash_address(prefix="sLp")
 
 
 if __name__ == '__main__':

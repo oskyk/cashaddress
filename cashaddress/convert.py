@@ -45,11 +45,16 @@ class Address:
 
     def cash_address(self, prefix=None):
         prefix = prefix if prefix is not None else self.prefix
+        self._check_case(prefix)
+        is_uppercase = prefix == prefix.upper()
         version_int = Address._address_type('cash', self.version)[1]
         payload = [version_int] + self.payload
         payload = convertbits(payload, 8, 5)
         checksum = calculate_checksum(prefix, payload)
-        return prefix + ':' + b32encode(payload + checksum)
+        address_string = prefix + ':' + b32encode(payload + checksum)
+        if is_uppercase:
+            return address_string.upper()
+        return address_string
 
     @staticmethod
     def code_list_to_string(code_list):
@@ -95,8 +100,7 @@ class Address:
 
     @staticmethod
     def _cash_string(address_string):
-        if address_string.upper() != address_string and address_string.lower() != address_string:
-            raise InvalidAddress('Cash address contains uppercase and lowercase characters')
+        Address._check_case(address_string)
         address_string = address_string.lower()
         colon_count = address_string.count(':')
         if colon_count == 0:
@@ -113,6 +117,11 @@ class Address:
             version += '-TESTNET'
         payload = converted[1:-6]
         return Address(version, payload, prefix)
+
+    @staticmethod
+    def _check_case(text):
+        if text.upper() != text and text.lower() != text:
+            raise InvalidAddress('Cash address contains uppercase and lowercase characters')
 
 
 def to_cash_address(address):
