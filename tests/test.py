@@ -1,6 +1,7 @@
 import unittest
 
 from cashaddress import convert
+from cashaddress.convert import Address, InvalidAddress
 
 
 class TestConversion(unittest.TestCase):
@@ -60,6 +61,43 @@ class TestConversion(unittest.TestCase):
         self.assertFalse(convert.is_valid('22222wR6hoVijCmr1u8UgzFMHFP6rpQyRvP'))
         self.assertFalse(convert.is_valid(False))
         self.assertFalse(convert.is_valid('Hello World!'))
+
+    def test_prefixes(self):
+        """Test a few identical addresses with different CashAddr prefixes"""
+        legacy_address = "1NLcNpAaBBMekgBZk7NxwdxwtSUTfTV8Aq"
+        addr = Address.from_string(legacy_address)
+        default_prefix = addr.prefix
+        self.assertEqual(default_prefix, Address.MAINNET_PREFIX)
+        self.assertEqual(addr.cash_address(),
+                         'bitcoincash:qr4pqy6q4cy2d50zpaek57nnrja7289fkskz6jm7yf')
+        self.assertEqual(addr.cash_address(prefix='abc'),
+                         'abc:qr4pqy6q4cy2d50zpaek57nnrja7289fksqt4c50w9')
+        self.assertEqual(addr.cash_address(prefix='simpleledger'),
+                         'simpleledger:qr4pqy6q4cy2d50zpaek57nnrja7289fks6e3fw76h')
+
+        regtest_address = 'regtest:qr4pqy6q4cy2d50zpaek57nnrja7289fksjm6es9se'
+        addr2 = Address.from_string(regtest_address)
+        self.assertEqual(addr2.legacy_address(), legacy_address)
+        # The prefix defaults to the one in the input string.
+        self.assertEqual(addr2.prefix, 'regtest')
+        self.assertEqual(addr2.cash_address(), regtest_address)
+
+    def test_prefix_case(self):
+        with self.assertRaises(InvalidAddress):
+            Address.from_string(
+                'rEgTeSt:qr4pqy6q4cy2d50zpaek57nnrja7289fksjm6es9se')
+        with self.assertRaises(InvalidAddress):
+            Address.from_string(
+                'regtest:QR4PQY6Q4CY2D50ZPAEK57NNRJA7289FKSJM6ES9SE')
+
+        addr = Address.from_string('regtest:qr4pqy6q4cy2d50zpaek57nnrja7289fksjm6es9se')
+        # The address should take the same case as the specified prefix
+        self.assertEqual(addr.cash_address(prefix="SLP"),
+                         'SLP:QR4PQY6Q4CY2D50ZPAEK57NNRJA7289FKSWF89PY2G')
+        # Do not allow mixed-case prefixes
+        with self.assertRaises(InvalidAddress):
+            addr.cash_address(prefix="sLp")
+
 
 if __name__ == '__main__':
     unittest.main()
