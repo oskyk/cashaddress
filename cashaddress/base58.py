@@ -33,7 +33,7 @@ with the bitcoin network.
 # forum post by Gavin Andresen, so direct your praise to him.
 # This module adds shiny packaging and support for python3.
 
-__version__ = '0.2.5'
+__version__ = '2.1.0'
 
 from hashlib import sha256
 
