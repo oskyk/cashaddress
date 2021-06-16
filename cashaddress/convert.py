@@ -106,11 +106,11 @@ class Address:
         decoded = b32decode(base32string)
         if not verify_checksum(prefix, decoded):
             raise InvalidAddress('Bad cash address checksum')
-        converted = convertbits(decoded, 5, 8)
+        converted = convertbits(decoded[:-8], 5, 8, False)
         version = Address._address_type('cash', converted[0])[0]
         if prefix == Address.TESTNET_PREFIX:
             version += '-TESTNET'
-        payload = converted[1:-6]
+        payload = converted[1:]
         return Address(version, payload, prefix)
 
 
